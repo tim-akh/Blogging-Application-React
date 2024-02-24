@@ -25,6 +25,12 @@ const PublicationDetails = () => {
   if (!publication) {
     return <div>Loading...</div>;
   }
+  
+  const formatDate = (dateISOString) => {
+    var date = new Date(Date.parse(dateISOString))
+    return date.getDate() + "-" + (date.getMonth() + 1) + "-" +
+     date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+  }
 
   return (
     <div>
@@ -32,6 +38,7 @@ const PublicationDetails = () => {
         <Link to={"/publications/" + publication.id + "/edit"}>Edit publication</Link>
       }
       <p>Author: {publication.user.username}</p>
+      <p>{formatDate(publication.createdAt)}</p>
       <h2>{publication.header}</h2>
       <p>{publication.content}</p>
     </div>
