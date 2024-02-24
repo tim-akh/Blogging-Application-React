@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const PublicationForm = ({ publication, onSubmit }) => {
+  
+  const Auth = useAuth()
+  const user = Auth.getUser()
+  const isUser = user.role === 'USER'
+
   const [header, setHeader] = useState(publication ? publication.header : '');
   const [content, setContent] = useState(publication ? publication.content : '');
   const navigate = useNavigate();
@@ -11,7 +17,8 @@ const PublicationForm = ({ publication, onSubmit }) => {
     event.preventDefault();
     axios.post(`http://localhost:8080/api/v1/publications`, {
       "header": header,
-      "content": content
+      "content": content,
+      "user": user
     })
     navigate("/");
   };

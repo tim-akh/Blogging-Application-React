@@ -15,13 +15,13 @@ const PublicationList = () => {
     const fetchPublications = async () => {
       const result = await axios.get(`http://localhost:8080/api/v1/publications`);
       setPublications(result.data);
-      console.log(user)
     };
     fetchPublications();
   }, []);
 
   return (
     <div>
+
       <h2>Publications List</h2>
       <ul>
         {publications.map(publication => (

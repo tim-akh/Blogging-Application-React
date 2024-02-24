@@ -7,6 +7,7 @@ import PublicationDetails from './components/publication/PublicationDetails';
 import PublicationForm from './components/publication/PublicationForm';
 import PublicationList from './components/publication/PublicationList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import UserPage from './components/user/UserPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/publications" element={<PublicationList />} />
         <Route path="/publications/new" element={<PublicationForm />} />
         <Route path="/publications/:id" element={<PublicationDetails />} />
+        <Route path="/users/:username" element={<UserPage />} />
       </Routes>
       </BrowserRouter>
       </AuthProvider>
