@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
-import PublicationForm from './PublicationForm';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const PublicationDetails = () => {
+
+  const Auth = useAuth()
+  const authUser = Auth.getUser()
+  const isRoleUser = authUser.role === 'USER'
+
   const { id } = useParams();
   const [publication, setPublication] = useState(null);
   const navigate = useNavigate();
@@ -16,15 +21,6 @@ const PublicationDetails = () => {
     fetchPublication();
   }, [id]);
 
-  const handleDelete = async () => {
-    await axios.delete(`http://localhost:8080/api/v1/publications/${id}`);
-    navigate("/");
-  };
-
-  const handleUpdate = async (updatedPublication) => {
-    await axios.put(`http://localhost:8080/api/v1/publications/${id}`, updatedPublication);
-    navigate("/");
-  };
 
   if (!publication) {
     return <div>Loading...</div>;
@@ -32,10 +28,12 @@ const PublicationDetails = () => {
 
   return (
     <div>
+      {authUser.username === publication.user.username &&
+        <Link to={"/publications/" + publication.id + "/edit"}>Edit publication</Link>
+      }
+      <p>Author: {publication.user.username}</p>
       <h2>{publication.header}</h2>
       <p>{publication.content}</p>
-      <button onClick={handleDelete}>Delete</button>
-      <PublicationForm publication={publication} onSubmit={handleUpdate} />
     </div>
   );
 };

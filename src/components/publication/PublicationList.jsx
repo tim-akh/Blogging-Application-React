@@ -26,7 +26,7 @@ const PublicationList = () => {
       <ul>
         {publications.map(publication => (
           <li key={publication.id}>
-            <Link to={`/publications/${publication.id}`}>{publication.id} - {publication.header}</Link>
+            <Link to={`/publications/${publication.id}`}>{publication.header}</Link>
           </li>
         ))}
       </ul>
