@@ -35,8 +35,7 @@ const PublicationEdit = () => {
     event.preventDefault();
     await axios.put(`http://localhost:8080/api/v1/publications/${id}`, {
       "header": header,
-      "content": content,
-      "user": authUser
+      "content": content
     });
     navigate("/users/" + authUser.username);
   };

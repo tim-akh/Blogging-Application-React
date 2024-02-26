@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserPage from './components/user/UserPage';
 import PublicationEdit from './components/publication/PublicationEdit';
 import PublicationCreate from './components/publication/PublicationCreate';
+import CommentEdit from './components/comment/CommentEdit';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/publications/new" element={<PublicationCreate />} />
             <Route path="/publications/:id" element={<PublicationDetails />} />
             <Route path="/publications/:id/edit" element={<PublicationEdit />} />
+            <Route path="/comments/:id/edit" element={<CommentEdit />} />
             <Route path="/users/:username" element={<UserPage />} />
           </Routes>
         </BrowserRouter>
