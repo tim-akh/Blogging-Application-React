@@ -6,11 +6,16 @@ const Navbar = () => {
     const Auth = useAuth()
     const isAuthenticated = Auth.userIsAuthenticated()
 
+    var isRoleUser = false;
+    var isRoleAdmin = false;
+
     const user = Auth.getUser()
     var currentUserPage = "/users/"
 
+
     if (isAuthenticated) {
-        const isUser = user.role === 'USER'
+        isRoleUser = user.role === 'USER'
+        isRoleAdmin = user.role === 'ADMIN'
         currentUserPage = "/users/" + user.username
     }
     

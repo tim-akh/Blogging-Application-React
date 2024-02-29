@@ -6,8 +6,16 @@ import { useAuth } from '../context/AuthContext';
 const PublicationList = () => {
 
   const Auth = useAuth()
-  const user = Auth.getUser()
-  const isUser = user.role === 'USER'
+  const isAuthenticated = Auth.userIsAuthenticated()
+
+  var isRoleUser = false;
+  var isRoleAdmin = false;
+
+  const authUser = Auth.getUser()
+  if (isAuthenticated) {
+    isRoleUser = authUser.role === 'USER'
+    isRoleAdmin = authUser.role === 'ADMIN'
+  }
 
   const [publications, setPublications] = useState([]);
 
@@ -32,7 +40,9 @@ const PublicationList = () => {
           </li>
         ))}
       </ul>
+      {isAuthenticated &&
       <Link to="/publications/new">Create New Publication</Link>
+      }
     </div>
   );
 };

@@ -6,8 +6,16 @@ import { useAuth } from "../context/AuthContext";
 const UserPage = () => {
 
     const Auth = useAuth()
+    const isAuthenticated = Auth.userIsAuthenticated()
+
+    var isRoleUser = false;
+    var isRoleAdmin = false;
+  
     const authUser = Auth.getUser()
-    const isRoleUser = authUser.role === 'USER'
+    if (isAuthenticated) {
+      isRoleUser = authUser.role === 'USER'
+      isRoleAdmin = authUser.role === 'ADMIN'
+    }
 
     const { username } = useParams();
     const [user, setUser] = useState(null);
@@ -24,34 +32,61 @@ const UserPage = () => {
         return <div>Loading...</div>
     }
 
-
-    return (
-        <div>
-            <h1>Profile</h1>
+    if (!isAuthenticated) {
+        return (
             <div>
-                <p>Username: {user.username}</p>
-                <p>Email: {user.email}</p>
-                <p>Role: {user.role}</p>
-                {
-                    user.publications.length === 0 ? "No publications yet" :
-                    <div>
-                        <p>Publications:</p>
-                        <ul>
-                            {user.publications.map(publication => (
-                            <li key={publication.id}>
-                                <Link to={`/publications/${publication.id}`}>{publication.header}</Link> 
-                                <span> Rating: {publication.votes.map(vote => vote.dynamic).reduce((partialSum, a) => partialSum + a, 0)}</span>
-                            </li>
-                            ))}
-                        </ul>
-                    </div>
+                <h1>Profile</h1>
+                <div>
+                    <p>Username: {user.username}</p>
+                    <p>Email: {user.email}</p>
+                    <p>Role: {user.role}</p>
+                    {
+                        user.publications.length === 0 ? "No publications yet" :
+                        <div>
+                            <p>Publications:</p>
+                            <ul>
+                                {user.publications.map(publication => (
+                                <li key={publication.id}>
+                                    <Link to={`/publications/${publication.id}`}>{publication.header}</Link> 
+                                    <span> Rating: {publication.votes.map(vote => vote.dynamic).reduce((partialSum, a) => partialSum + a, 0)}</span>
+                                </li>
+                                ))}
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <h1>Profile</h1>
+                <div>
+                    <p>Username: {user.username}</p>
+                    <p>Email: {user.email}</p>
+                    <p>Role: {user.role}</p>
+                    {
+                        user.publications.length === 0 ? "No publications yet" :
+                        <div>
+                            <p>Publications:</p>
+                            <ul>
+                                {user.publications.map(publication => (
+                                <li key={publication.id}>
+                                    <Link to={`/publications/${publication.id}`}>{publication.header}</Link> 
+                                    <span> Rating: {publication.votes.map(vote => vote.dynamic).reduce((partialSum, a) => partialSum + a, 0)}</span>
+                                </li>
+                                ))}
+                            </ul>
+                        </div>
+                    }
+                </div>
+                { authUser.username === user.username &&
+                    <Link to="/publications/new">Create New Publication</Link>
                 }
             </div>
-            { authUser.username === user.username &&
-                <Link to="/publications/new">Create New Publication</Link>
-            }
-        </div>
-    )
+        )
+    }
 }
 
 export default UserPage;

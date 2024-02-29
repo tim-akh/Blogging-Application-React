@@ -6,8 +6,16 @@ import { useAuth } from '../context/AuthContext';
 const CommentEdit = () => {
 
   const Auth = useAuth()
+  const isAuthenticated = Auth.userIsAuthenticated()
+
+  var isRoleUser = false;
+  var isRoleAdmin = false;
+
   const authUser = Auth.getUser()
-  const isRoleUser = authUser.role === 'USER'
+  if (isAuthenticated) {
+    isRoleUser = authUser.role === 'USER'
+    isRoleAdmin = authUser.role === 'ADMIN'
+  }
 
   const { id } = useParams();
   const [comment, setComment] = useState(null);

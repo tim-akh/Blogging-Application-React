@@ -6,13 +6,29 @@ import { useAuth } from '../context/AuthContext';
 const PublicationCreate = () => {
 
     const Auth = useAuth()
+    const isAuthenticated = Auth.userIsAuthenticated()
+
+    var isRoleUser = false;
+    var isRoleAdmin = false;
+  
     const authUser = Auth.getUser()
-    const isRoleUser = authUser.role === 'USER'
+    if (isAuthenticated) {
+      isRoleUser = authUser.role === 'USER'
+      isRoleAdmin = authUser.role === 'ADMIN'
+    }
   
     const [header, setHeader] = useState('');
     const [content, setContent] = useState('');
     const navigate = useNavigate();
-  
+
+    useEffect(() => {
+      if (!isAuthenticated) {
+        navigate('/login')
+      } 
+
+    }, []);
+
+
   
     
     const handleSubmit = (event) => {
