@@ -14,9 +14,9 @@ const CommentCreate = ({ publication }) => {
   
   
     
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         //event.preventDefault();
-        await axios.post(`http://localhost:8080/api/v1/comments/`, {
+        axios.post(`http://localhost:8080/api/v1/comments/`, {
           "content": content,
           "publication": publication,
           "user": authUser

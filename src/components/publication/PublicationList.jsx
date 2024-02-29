@@ -19,6 +19,7 @@ const PublicationList = () => {
     fetchPublications();
   }, []);
 
+
   return (
     <div>
 
@@ -27,6 +28,7 @@ const PublicationList = () => {
         {publications.map(publication => (
           <li key={publication.id}>
             <Link to={`/publications/${publication.id}`}>{publication.header}</Link>
+            <span> Rating: {publication.votes.map(vote => vote.dynamic).reduce((partialSum, a) => partialSum + a, 0)}</span>
           </li>
         ))}
       </ul>

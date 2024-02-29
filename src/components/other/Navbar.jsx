@@ -4,17 +4,26 @@ import { Link } from "react-router-dom"
 const Navbar = () => {
 
     const Auth = useAuth()
-    const user = Auth.getUser()
-    const isUser = user.role === 'USER'
-    const currentUserPage = "/users/" + user.username
+    const isAuthenticated = Auth.userIsAuthenticated()
 
+    const user = Auth.getUser()
+    var currentUserPage = "/users/"
+
+    if (isAuthenticated) {
+        const isUser = user.role === 'USER'
+        currentUserPage = "/users/" + user.username
+    }
+    
     return (
         <div>
-            <Link to={currentUserPage}>{user.username}</Link><br />
+            { isAuthenticated
+            ?
+            <Link to={currentUserPage}>{user.username}</Link>
+            :
+            <Link to="/login">Login</Link>
+            }<br />
             <Link to="/">Starting page</Link><br />
-            <Link to="/publications">Publications</Link><br />
-            <Link to="/login">Login</Link><br />
-            <Link to="/signup">Sign up</Link><br /><br /><br /><br />
+            <Link to="/publications">Publications</Link><br /><br /><br /><br />
         </div>
     )
 }
