@@ -10,6 +10,9 @@ import UserPage from './components/user/UserPage';
 import PublicationEdit from './components/publication/PublicationEdit';
 import PublicationCreate from './components/publication/PublicationCreate';
 import CommentEdit from './components/comment/CommentEdit';
+import CommentDetails from './components/comment/CommentDetails';
+import ReportList from './components/report/ReportList';
+import ReportCreate from './components/report/ReportCreate';
 
 function App() {
   return (
@@ -25,8 +28,11 @@ function App() {
             <Route path="/publications/new" element={<PublicationCreate />} />
             <Route path="/publications/:id" element={<PublicationDetails />} />
             <Route path="/publications/:id/edit" element={<PublicationEdit />} />
+            <Route path="/comments/:id" element={<CommentDetails />} />
             <Route path="/comments/:id/edit" element={<CommentEdit />} />
             <Route path="/users/:username" element={<UserPage />} />
+            <Route path="/reports" element={<ReportList />} />
+            <Route path="/reports/new" element={<ReportCreate />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

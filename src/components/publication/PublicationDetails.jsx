@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import CommentCreate from '../comment/CommentCreate';
 import VotingService from '../service/VotingService';
+import AdminService from '../service/AdminService';
 
 const PublicationDetails = () => {
 
@@ -84,7 +85,7 @@ const PublicationDetails = () => {
           <Link to={"/publications/" + publication.id + "/edit"}>Edit publication</Link>
         }
         <p>Rating: {publication.votes.map(vote => vote.dynamic).reduce((partialSum, a) => partialSum + a, 0)}</p>
-        <p>Author: {publication.user.username}</p>
+        <p>Author: <Link to={"/users/" + publication.user.username}>{publication.user.username}</Link></p>
         <p>{formatDate(publication.createdAt)}</p>
         <h2>{publication.header}</h2>
         <p>{publication.content}</p>
@@ -106,11 +107,12 @@ const PublicationDetails = () => {
 
 
           { (isRoleUser && (publication.user.username !== authUser.username)) &&
-            <button>Report</button>
+            <Link to={'/reports/new'} state={{user: publication.user, publication: publication, comment: null}}>Report</Link>
           }
-          { (isRoleAdmin && (publication.user.username !== authUser.username)) &&
-            <button>Ban</button>
-          }
+          {isRoleAdmin && publication.user.banned && (publication.user.username !== authUser.username) && 
+          <button onClick={() =>AdminService.unbanUser(publication.user)}>Unban</button>}
+          {isRoleAdmin && !publication.user.banned && (publication.user.username !== authUser.username) &&
+          <button onClick={() =>AdminService.banUser(publication.user)}>Ban</button>}
         </div>
         {publication.comments.length === 0? "Be first to leave a comment" :
         <div>
@@ -137,15 +139,16 @@ const PublicationDetails = () => {
                 :
                 <button onClick={() => VotingService.handleCommentDownvote(authUser, comment)}>Downvote</button>
                 }
-                { comment.user.username === authUser.username &&
+                { (comment.user.username === authUser.username || isRoleAdmin) &&
                   <button onClick={() => handleDelete(comment.id)}>Delete</button>
                 }
                 { (isRoleUser && (comment.user.username !== authUser.username)) &&
-                  <button>Report</button>
+                  <Link to={'/reports/new'} state={{user: comment.user, publication: null, comment: comment}}>Report</Link>
                 }
-                { (isRoleAdmin && (publication.user.username !== authUser.username)) &&
-                  <button>Ban</button>
-                }
+                  {isRoleAdmin && comment.user.banned &&
+                  <button onClick={() =>AdminService.unbanUser(comment.user)}>Unban</button>}
+                  {isRoleAdmin && !comment.user.banned &&
+                  <button onClick={() =>AdminService.banUser(comment.user)}>Ban</button>}
               </li>
             ))}
           </ul>

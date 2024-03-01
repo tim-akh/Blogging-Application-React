@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import AdminService from "../service/AdminService";
 
 const UserPage = () => {
 
@@ -39,7 +40,8 @@ const UserPage = () => {
                 <div>
                     <p>Username: {user.username}</p>
                     <p>Email: {user.email}</p>
-                    <p>Role: {user.role}</p>
+                    <p>Role: {user.role}</p> 
+                    <p>Banned: {user.banned ? "Yes" : "No"}</p>
                     {
                         user.publications.length === 0 ? "No publications yet" :
                         <div>
@@ -65,7 +67,16 @@ const UserPage = () => {
                 <div>
                     <p>Username: {user.username}</p>
                     <p>Email: {user.email}</p>
-                    <p>Role: {user.role}</p>
+                    <p>Role: {user.role}</p> 
+                    {isRoleAdmin && user.role === "USER" && 
+                    <button onClick={() =>AdminService.makeUserAdmin(user)}>Make ADMIN</button>}
+                    {isRoleAdmin && user.role === "ADMIN" &&
+                     <button onClick={() =>AdminService.makeUserDefault(user)}>Make USER</button>}
+                    <p>Banned: {user.banned ? "Yes" : "No"}</p>
+                    {isRoleAdmin && user.banned &&
+                     <button onClick={() =>AdminService.unbanUser(user)}>Unban</button>}
+                    {isRoleAdmin && !user.banned &&
+                     <button onClick={() =>AdminService.banUser(user)}>Ban</button>}<br/>
                     {
                         user.publications.length === 0 ? "No publications yet" :
                         <div>
